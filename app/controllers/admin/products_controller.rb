@@ -31,10 +31,11 @@ class Admin::ProductsController < ApplicationController
     @product=Product.find(params[:id])
     @product.destroy
     redirect_to admin_products_path
+    flash[:warning]="删除成功"
   end
   
   
   def product_params
-    params.require(:product).permit(:title,:description,:price,:quantity)
+    params.require(:product).permit(:title,:description,:price,:quantity,:product_img)
   end
 end

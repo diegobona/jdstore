@@ -1,0 +1,19 @@
+<h3>商品浏览</h3>
+<div class="row">
+	<% @products.each do |product| %>
+	<!-- 下面的代码实现了一行放4个： -->
+	  <div class="col-md-3 col-xs-6">
+	   	  <%= link_to product_path(product) do %>
+	   		 <%if product.product_img.present? %>
+	   		  <%=image_tag(product.product_img.thumb.url, class: "thumbnail") %>
+	   		 <%else %>
+	   		   <%=image_tag("http://placehold.it/200x200&text=No Pic", class: "thumbnail") %>
+	   		 <%end %>
+	   	  <%end %>
+	       <%=link_to(product.title,product_path(product)) %>
+	   	  <%= product.description %>
+	   	  $<%= product.price %>
+	  </div>  
+	<% end%>
+</div>
+		
