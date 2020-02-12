@@ -12,8 +12,16 @@
 		            <%= link_to("商品", products_path) %>
 		          </li>
 		        </ul>
+            <ul class="nav navbar-nav pull-right ">
+             <li class="active">
+               <%= link_to(cart_path(get_current_cart)) do %>
+               <%# current_cart是方法(@current_cart才是实例变量)，不能在html调用，所以要在application_controller中定义为helper_method %>
+                <li>购物车( <%=get_current_cart.products.count%>)</li>
+               <%end%>
+             </li>
+           </ul>
             <ul class="nav navbar-nav navbar-right">
-                
+
 				                <% if !current_user %>
 				                 <li><%= link_to("注册", new_user_registration_path) %> </li>
 				                 <li><%= link_to("登入", new_user_session_path) %></li>
@@ -31,7 +39,7 @@
 				                   </ul>
 				                 </li>
 				               <% end %>
-                
+
             </ul>
         </div>
         <!-- /.navbar-collapse -->
