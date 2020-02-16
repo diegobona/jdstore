@@ -1,6 +1,6 @@
 <h3>购物车详情</h3>
 
-
+<%=link_to("清空购物车",clearCart_cart_path(@cart),method: :delete)%>
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -8,13 +8,12 @@
 			<th scope="col">商品图片</th>
 			<th scope="col">商品价格</th>
 			<th scope="col">商品数量</th>
-      <th scope="col">总价</th>
 			<th scope="col">操作</th>
 		</tr>
 	</thead>
 	<tbody>
 		<%# <% @cart.cart_items.each do |cartItem|%>
-    <%# 直接从helper函数调用get_current_cart方法，则不需要访问controller中变量@cart，这样controller中的show action暂也不需定义 %>
+    <%# 直接调用view helper函数get_current_cart，这样不需要访问controller中变量@cart，且controller中的show action也不需定义 %>
     <% get_current_cart.cart_items.each do |cartItem|%>
 		<tr>
 			<td><%=link_to(cartItem.product.title,product_path(cartItem.product))%></td>
@@ -24,19 +23,29 @@
         <%end%>
       </td>
       <td><%= cartItem.product.price %></td>
-			<td><%= cartItem.quantity %></td>
-      <td><%= cartItem.quantity*cartItem.product.price %></td>
+
+		  <td>
+				<%# 这个和之前做的编辑表单没区别，只不过view名不是edit，所以直接找找不到update action，要指定提交的url才能匹配到(cart_items#update对应的url) %>
+			 <%=simple_form_for cartItem,url:cart_cart_item_path(get_current_cart,cartItem.product) do |f|%>
+				 <%= f.select :quantity,1..cartItem.product.quantity %>
+				 <%= f.submit "更新" %>
+			 <%end%>
+			</td>
+
 			<td>
-				<%# <%= link_to("删除",cart_cart_item_path(@cart,@cart_item),{method: :delete,data:{confirm:"确定删除吗"}}) %>
+				<%# path函数的参数这样取是不行的：cart_cart_item_path(@cart,@product)，因为该view名是show，而对应的action名是destroy，找不到这个action，变量就取不到？%>
+				<%# 也就是path函数参数不一定要从action取！！只要能拿到就行 %>
+				<%= link_to("删除",cart_cart_item_path(get_current_cart,cartItem.product),{method: :delete,data:{confirm:"确定删除吗"}})%>
 			</td>
 		</tr>
 		<% end%>
 	</tbody>
 </table>
 
+
 <div class="total clearfix">
       <span class="pull-right">
-         <span> 总计 xxx RMB  </span>
+         <span> 总计$<%=get_cart_total_price(get_current_cart)%> </span>
       </span>
 </div>
 

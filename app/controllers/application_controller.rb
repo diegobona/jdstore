@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :get_current_cart
 
+  #为什么要定义这个方法？因为ruby里类没有属性的概念，只有方法，取实体变量只能通过方法
   def get_current_cart
     #如果为空，则调用find_cart方法
     @current_cart=@current_cart || find_cart

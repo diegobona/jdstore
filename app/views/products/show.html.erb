@@ -14,14 +14,18 @@
 		</div>
 		<div class="product-price">
 			$<%= @product.price %>
-		</div>	
+		</div>
 		<div>
 			数量:<%= @product.quantity %>
-		</div>	
-		<div class="">
-			<%= link_to("加入购物车",add_to_cart_product_path(@product),method: :post,class:"btn btn-danger") %>
 		</div>
-		
+		<div class="">
+			<%if @product.quantity>0%>
+			 <%= link_to("加入购物车",add_to_cart_product_path(@product),method: :post,class:"btn btn-danger") %>
+			<%else%>
+			  该商品已卖完
+			<%end%>
+		</div>
+
 	</div>
-	
+
 </div>

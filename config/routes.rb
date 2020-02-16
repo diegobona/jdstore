@@ -16,8 +16,13 @@ Rails.application.routes.draw do
   end
 
   resources :carts do
+    member do
+      delete :clearCart
+    end
     resources :cart_items
   end
+
+
 
 
 end

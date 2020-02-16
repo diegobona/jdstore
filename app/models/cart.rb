@@ -3,20 +3,23 @@ class Cart < ApplicationRecord
   has_many :products, through: :cart_items,source: :product
 
   def add_product_to_cart(product)
-    #判断当前购物车里是否已有该商品
-    #self表示当前cart实例
-    # if !self.cart_items
-    #   self.cart_items.each do |cart_item|
-    #     if cart_item.product == product
-    #       cartitem.quantity++
-    #   end
-    # else
       cartitem=self.cart_items.build
       cartitem.product=product
       cartitem.quantity=1
       cartitem.save
-    # end
+  end
 
+  def sum_cart_total_price
+    sum=0
+    self.cart_items.each do |cartItem|
+      sum +=cartItem.product.price*cartItem.quantity
+    end
+    sum
+  end
+
+  def clearCartModel
+    #不需要一个一个循环删除，直接all
+    self.cart_items.destroy_all
   end
 
 end
