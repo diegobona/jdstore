@@ -11,4 +11,9 @@ class CartsController < ApplicationController
     redirect_to :back
   end
 
+  def checkout
+    #进入checkout页面，就预生成一个order对象，不存入数据库。后面点了“生成订单”才用“create”action写入库！
+    @order=Order.new
+  end
+
 end

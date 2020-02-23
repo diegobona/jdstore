@@ -1,0 +1,21 @@
+<h2>全部订单</h2>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">订单号</th>
+			<th scope="col">订单状态</th>
+			<th scope="col">订购人</th>
+			<th scope="col">生成时间</th>
+		</tr>
+	</thead>
+	<tbody>
+    <% @orders.each do |order|%>
+  		<tr>
+        <td><%=link_to(order.id,admin_order_path(order))%></td>
+  			<td><%=order.aasm_state%></td>
+        <td><%=order.user.email%></td>
+        <td><%=order.created_at.to_s(:long)%></td>
+  		</tr>
+		<% end%>
+	</tbody>
+</table>

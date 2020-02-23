@@ -33,9 +33,12 @@
 				                   </a>
 				                    <ul class="dropdown-menu">
 				                        <li> <%= link_to("登出", destroy_user_session_path, method: :delete) %> </li>
-								    <%if current_user && current_user.admin? %>
-								      <li> <%= link_to("管理员面板", admin_products_path) %> </li>
-								    <%end%>
+            								    <%if current_user && current_user.admin? %>
+            								      <li> <%= link_to("管理员面板", admin_products_path) %> </li>
+                                  <li> <%= link_to("全部订单", admin_orders_path) %> </li>
+            								    <%end%>
+                                <li> <%= link_to("我的订单", account_orders_path) %> </li>
+
 				                   </ul>
 				                 </li>
 				               <% end %>

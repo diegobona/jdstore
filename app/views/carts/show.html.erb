@@ -13,7 +13,7 @@
 	</thead>
 	<tbody>
 		<%# <% @cart.cart_items.each do |cartItem|%>
-    <%# 直接调用view helper函数get_current_cart，这样不需要访问controller中变量@cart，且controller中的show action也不需定义 %>
+    <%# 直接调用view helper函数get_current_cart，这样不需要访问controller中变量@cart，这样controller中的show action也不需定义 %>
     <% get_current_cart.cart_items.each do |cartItem|%>
 		<tr>
 			<td><%=link_to(cartItem.product.title,product_path(cartItem.product))%></td>
@@ -25,16 +25,17 @@
       <td><%= cartItem.product.price %></td>
 
 		  <td>
-				<%# 这个和之前做的编辑表单没区别，只不过view名不是edit，所以直接找找不到update action，要指定提交的url才能匹配到(cart_items#update对应的url) %>
+			 <%# 这个和之前做的编辑表单没区别，只不过view名不是edit/update，所以直接找找不到update action，要指定form提交的url才能匹配到(cart_items#update对应的url) %>
 			 <%=simple_form_for cartItem,url:cart_cart_item_path(get_current_cart,cartItem.product) do |f|%>
+			   <%# 限定可选的商品数量不超过库存 %>
 				 <%= f.select :quantity,1..cartItem.product.quantity %>
 				 <%= f.submit "更新" %>
 			 <%end%>
 			</td>
 
 			<td>
-				<%# path函数的参数这样取是不行的：cart_cart_item_path(@cart,@product)，因为该view名是show，而对应的action名是destroy，找不到这个action，变量就取不到？%>
-				<%# 也就是path函数参数不一定要从action取！！只要能拿到就行 %>
+				<%# path函数的参数这样取是不行的：cart_cart_item_path(@cart,@product)，因为该view名是show，而对应的action名是destroy，匹配不上该action，变量取不到？%>
+				<%# 也就是path函数的参数不一定要从action取！！只要能拿到就行 %>
 				<%= link_to("删除",cart_cart_item_path(get_current_cart,cartItem.product),{method: :delete,data:{confirm:"确定删除吗"}})%>
 			</td>
 		</tr>
@@ -52,5 +53,5 @@
     <hr>
 
 <div class="checkout ">
-      <%= link_to("确认结账", "#", method: :post, class: "btn btn-lg btn-danger pull-right") %>
+      <%= link_to("确认结账", checkout_cart_path(get_current_cart), method: :post, class: "btn btn-lg btn-danger pull-right") %>
 </div>

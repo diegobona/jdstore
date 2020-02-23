@@ -1,0 +1,53 @@
+<h3>订单明细</h3>
+<hr>
+订单号：<%=@order.id%>  订单日期：<%=@order.created_at%>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">商品图片</th>
+			<th scope="col">商品名称</th>
+			<th scope="col">商品价格</th>
+			<th scope="col">商品数量</th>
+		</tr>
+	</thead>
+	<tbody>
+    <% @productLists.each do |productList|%>
+  		<tr>
+        <td>
+          <%=link_to(product_path(Product.find_by(title:productList.title))) do %>
+            <%=image_tag(Product.find_by(title:productList.title).product_img.thumb.url) %>
+          <%end%>
+        </td>
+  			<td><%=link_to(productList.title,product_path(Product.find_by(title:productList.title)))%></td>
+        <td><%=productList.price%></td>
+        <td><%=productList.quantity%></td>
+  		</tr>
+		<% end%>
+	</tbody>
+</table>
+<div class="pull-right">
+  <span>总计：$<%=@order.totalPrice%></span>
+</div>
+
+<hr>
+<h3>寄送信息</h3>
+购买人姓名：
+<%=@order.billing_name%>
+<br>
+收件人姓名：
+<%=@order.shipping_name%>
+收件人地址：
+<%=@order.shipping_address%>
+<br>
+<div class="pull-right">
+	<%# 直接@order.paid和@order.order_placed也可，取order.rb中的state？ %>
+	<%if @order.aasm_state=="order_placed"|| @order.aasm_state=="paid"%>
+		<%=link_to("申请取消订单",apply_to_cancel_order_path(@order.token),method: :post,class:"btn btn-info")%>
+	<%end%>
+	<%if !@order.is_paid?%>
+		<%=link_to("支付宝支付",pay_with_alipay_order_path(@order.token),:method=>:post,class:"btn btn-danger")%>
+		<%=link_to("微信支付",pay_with_wechat_order_path(@order.token),:method=>:post,class:"btn btn-danger")%>
+	<% else %>
+	  <p class="text-center">此订单已完成付款</p>
+	<%end%>
+</div>

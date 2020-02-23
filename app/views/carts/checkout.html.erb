@@ -1,0 +1,37 @@
+<h3>购物明细</h3>
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">商品名称</th>
+			<th scope="col">商品单价</th>
+			<th scope="col">商品数量</th>
+		</tr>
+	</thead>
+	<tbody>
+    <% get_current_cart.cart_items.each do |cartItem|%>
+		<tr>
+			<td><%=cartItem.product.title%></td>
+      <td><%=cartItem.product.price%></td>
+      <td><%=cartItem.quantity%></td>
+		</tr>
+		<% end%>
+	</tbody>
+</table>
+<div class="">
+  总计 $<%=get_cart_total_price(get_current_cart)%>
+</div>
+
+<h3>填写订单信息</h3>
+ <%=simple_form_for @order do |f|%>
+  <h4>订购人</h4>
+  <hr>
+  <%=f.input :billing_name,:label=>"订购人姓名"%>
+  <h4>收货人</h4>
+  <hr>
+  <%=f.input :shipping_name,:label=>"收货人姓名"%>
+  <%=f.input :shipping_address,:label=>"收获人地址"%>
+  <%=f.submit "生成订单",:class=>"btn btn-danger btn-large"%>
+   <%# 生成订单，即单个实体order的“增”,create action即可搞定
+   注意：表单的提交必须用f.submit！！不能用link_to！否则数据传不到controller！ %>
+ <%end%>
